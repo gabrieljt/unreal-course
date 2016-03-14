@@ -14,8 +14,8 @@ public:
 	{
 	}
 
-	const int32 Bulls;
-	const int32 Cows;
+	int32 Bulls;
+	int32 Cows;
 };
 
 FBullCowGame::FBullCowGame(const FString Guess, const int32 MaximumTries)
@@ -62,12 +62,13 @@ void FBullCowGame::WriteIntro() const
 void FBullCowGame::RunGuessLoop()
 {
 	FString Guess = "";
+	EBullsAndCowsCount BullsAndCowsCount;
 	for (int32 i = 0; i < MyMaximumTries; ++i)
 	{
 		MyCurrentTry = i + 1;
 		Guess = ToLower(ReadValidGuessInput());
-		bMyGuessedRight = CheckBullsAndCowsCount(Guess);
-		WriteBullsAndCowsCount(Guess);
+		bMyGuessedRight = CheckBullsAndCowsCount(Guess, BullsAndCowsCount);
+		WriteBullsAndCowsCount(Guess, BullsAndCowsCount);
 		WriteGuessedWords();
 		WriteGuessedLetters();
 
@@ -106,7 +107,7 @@ bool FBullCowGame::IsValidGuessInput(const FString Word) const
 	return Word.length() == GetMyGuessWordLength() && IsIsogram(Word);
 }
 
-bool FBullCowGame::CheckBullsAndCowsCount(const FString Guess)
+bool FBullCowGame::CheckBullsAndCowsCount(const FString Guess, EBullsAndCowsCount& BullsAndCowsCount)
 {
 	int32 Bulls = 0, Cows = 0;
 
@@ -121,15 +122,16 @@ bool FBullCowGame::CheckBullsAndCowsCount(const FString Guess)
 			}
 		}
 	}
-	MyGuessedWords.insert(std::pair<FString, EBullsAndCowsCount>(Guess, EBullsAndCowsCount(Bulls, Cows)));
+	BullsAndCowsCount.Bulls = Bulls;
+	BullsAndCowsCount.Cows = Cows;
+	MyGuessedWords.insert(std::pair<FString, EBullsAndCowsCount>(Guess, BullsAndCowsCount));
 
 	return Guess == MyGuess;
 }
 
-void FBullCowGame::WriteBullsAndCowsCount(const FString Guess)
+void FBullCowGame::WriteBullsAndCowsCount(const FString Guess, const EBullsAndCowsCount BullsAndCowsCount) const
 {
-	EBullsAndCowsCount Result = MyGuessedWords[Guess];
-	std::cout << Guess << " has " << Result.Bulls + Result.Cows << " of " << GetMyGuessWordLength() << " correct letters; " << Result.Bulls << " Bulls and " << Result.Cows << " Cows." << std::endl;
+	std::cout << Guess << " has " << BullsAndCowsCount.Bulls + BullsAndCowsCount.Cows << " of " << GetMyGuessWordLength() << " correct letters; " << BullsAndCowsCount.Bulls << " Bulls and " << BullsAndCowsCount.Cows << " Cows." << std::endl;
 	return;
 }
 

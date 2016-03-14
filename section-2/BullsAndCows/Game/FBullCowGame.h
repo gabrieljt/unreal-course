@@ -10,7 +10,18 @@
 using FString = std::string;
 using int32 = int;
 
-struct EBullsAndCowsCount;
+struct EBullsAndCowsCount
+{
+public:
+	EBullsAndCowsCount();
+
+	EBullsAndCowsCount(const int32, const int32);
+
+	int32 Bulls;
+	int32 Cows;
+};
+
+enum EWordStatus;
 
 class FBullCowGame
 {
@@ -28,8 +39,8 @@ private:
 	void				RunGuessLoop();
 	FString				ReadValidGuessInput() const;
 	bool				IsValidGuessInput(const FString) const;
-	bool				CheckBullsAndCowsCount(const FString);
-	void				WriteBullsAndCowsCount(const FString);
+	bool				CheckBullsAndCowsCount(const FString, EBullsAndCowsCount&);
+	void				WriteBullsAndCowsCount(const FString, const EBullsAndCowsCount) const;
 	void				WriteGuessedWords() const;
 	void				WriteGuessedLetters() const;
 	void				WriteResult() const;
