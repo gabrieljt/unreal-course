@@ -64,6 +64,6 @@ private:
 	int32									MyCurrentTry;
 	bool									bMyGuessedRight;
 	std::set<char>							MyGuessedLetters;
-	std::map <FString, EBullsAndCows>	MyGuessedWords;
+	std::map <FString, EBullsAndCows>		MyGuessedWords;
 	static const FString					MyIsogramWords[];
 };
