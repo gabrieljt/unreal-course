@@ -3,7 +3,6 @@
 #include "Survive.h"
 #include "PositionReporter.h"
 
-
 // Sets default values for this component's properties
 UPositionReporter::UPositionReporter()
 {
@@ -15,22 +14,19 @@ UPositionReporter::UPositionReporter()
 	// ...
 }
 
-
 // Called when the game starts
 void UPositionReporter::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
-	
+	FString MyName = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%s reporting."), *MyName);
 }
-
 
 // Called every frame
-void UPositionReporter::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
+void UPositionReporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
 }
-
