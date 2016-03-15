@@ -1,25 +1,7 @@
 #include "FBullCowGame.h"
 
-struct EBullsAndCowsCount
-{
-public:
-	EBullsAndCowsCount()
-		: Bulls(0)
-		, Cows(0)
-	{}
-
-	EBullsAndCowsCount(const int32 Bulls, const int32 Cows)
-		: Bulls(Bulls)
-		, Cows(Cows)
-	{
-	}
-
-	int32 Bulls;
-	int32 Cows;
-};
-
 FBullCowGame::FBullCowGame(const FString Guess, const int32 MaximumTries)
-	: MyGuess(ToLower(Guess))
+	: MyIsogramWord(ToLower(Guess))
 	, MyMaximumTries(MaximumTries)
 	, MyCurrentTry(0)
 	, bMyGuessedRight(false)
@@ -45,6 +27,7 @@ void FBullCowGame::RunGame()
 	WriteIntro();
 	RunGuessLoop();
 	WriteResult();
+	return;
 }
 
 bool FBullCowGame::HasGuessedRight() const
@@ -55,83 +38,82 @@ bool FBullCowGame::HasGuessedRight() const
 void FBullCowGame::WriteIntro() const
 {
 	std::cout << "Welcome to Bulls and Cows!" << std::endl;
-	std::cout << "Can you guess the " << GetMyGuessWordLength() << " letter isogram I'm thinking of?" << std::endl;
+	std::cout << "Can you guess the " << GetMyIsogramWordLength() << " letter isogram I'm thinking of?" << std::endl;
 	return;
 }
 
 void FBullCowGame::RunGuessLoop()
 {
 	FString Guess = "";
-	EBullsAndCowsCount BullsAndCowsCount;
-	for (int32 i = 0; i < MyMaximumTries; ++i)
-	{
-		MyCurrentTry = i + 1;
-		Guess = ToLower(ReadValidGuessInput());
-		bMyGuessedRight = CheckBullsAndCowsCount(Guess, BullsAndCowsCount);
-		WriteBullsAndCowsCount(Guess, BullsAndCowsCount);
-		WriteGuessedWords();
-		WriteGuessedLetters();
 
-		if (bMyGuessedRight)
+	do
+	{
+		std::cout << "Try " << MyCurrentTry + 1 << " of " << MyMaximumTries << ". Type your guess: ";
+		Guess = ToLower(ReadGuessInput());
+		if (IsValidInput(Guess))
 		{
-			break;
+			++MyCurrentTry;
+			EBullsAndCowsGuess BullsAndCowsCount = ProcessBullsAndCowsGuess(Guess);
+			SaveBullsAndCowsGuess(Guess, BullsAndCowsCount);
+			WriteBullsAndCowsGuess(BullsAndCowsCount);
+			WriteGuessedWords();
+			WriteGuessedLetters();
+
+			if (GuessedRight(Guess))
+			{
+				bMyGuessedRight = true;
+				return;
+			}
 		}
-	}
+		else
+		{
+			std::cout << "Your guess must be an isogram (no repeated letters) and must have " << GetMyIsogramWordLength() << " letters." << std::endl;
+		}
+	} while (MyCurrentTry < MyMaximumTries);
 
 	return;
 }
 
-FString FBullCowGame::ReadValidGuessInput() const
+FString FBullCowGame::ReadGuessInput() const
 {
-	bool bIsValidGuess = false;
-	FString Guess = "";
-	const std::locale Locale;
-
-	do
-	{
-		std::cout << "Try " << MyCurrentTry << " of " << MyMaximumTries << ". Type your guess: ";
-		std::getline(std::cin, Guess);
-
-		bIsValidGuess = IsValidGuessInput(Guess);
-		if (!bIsValidGuess)
-		{
-			std::cout << "Your guess must be an isogram (no repeated letters) and must have " << GetMyGuessWordLength() << " letters." << std::endl;
-		}
-	} while (!bIsValidGuess);
-
+	FString Guess;
+	std::getline(std::cin, Guess);
 	return Guess;
 }
 
-bool FBullCowGame::IsValidGuessInput(const FString Word) const
+bool FBullCowGame::IsValidInput(const FString Word) const
 {
-	return Word.length() == GetMyGuessWordLength() && IsIsogram(Word);
+	return Word.length() == GetMyIsogramWordLength() && IsIsogram(Word);
 }
 
-bool FBullCowGame::CheckBullsAndCowsCount(const FString Guess, EBullsAndCowsCount& BullsAndCowsCount)
+EBullsAndCowsGuess FBullCowGame::ProcessBullsAndCowsGuess(const FString Guess)
 {
 	int32 Bulls = 0, Cows = 0;
 
-	for (int32 i = 0; i < GetMyGuessWordLength(); ++i)
+	for (int32 i = 0; i < GetMyIsogramWordLength(); ++i)
 	{
 		MyGuessedLetters.insert(Guess[i]);
-		for (int32 j = 0; j < GetMyGuessWordLength(); ++j)
+		for (int32 j = 0; j < GetMyIsogramWordLength(); ++j)
 		{
-			if (Guess[i] == MyGuess[j])
+			if (Guess[i] == MyIsogramWord[j])
 			{
 				i == j ? ++Bulls : ++Cows;
 			}
 		}
 	}
-	BullsAndCowsCount.Bulls = Bulls;
-	BullsAndCowsCount.Cows = Cows;
-	MyGuessedWords.insert(std::pair<FString, EBullsAndCowsCount>(Guess, BullsAndCowsCount));
 
-	return Guess == MyGuess;
+	return EBullsAndCowsGuess(Bulls, Cows, Guess);
 }
 
-void FBullCowGame::WriteBullsAndCowsCount(const FString Guess, const EBullsAndCowsCount BullsAndCowsCount) const
+void FBullCowGame::SaveBullsAndCowsGuess(const FString Guess, const EBullsAndCowsGuess BullsAndCowsGuess)
 {
-	std::cout << Guess << " has " << BullsAndCowsCount.Bulls + BullsAndCowsCount.Cows << " of " << GetMyGuessWordLength() << " correct letters; " << BullsAndCowsCount.Bulls << " Bulls and " << BullsAndCowsCount.Cows << " Cows." << std::endl;
+	MyGuessedWords.insert(std::pair<FString, EBullsAndCowsGuess>(Guess, BullsAndCowsGuess));
+	return;
+}
+
+void FBullCowGame::WriteBullsAndCowsGuess(const EBullsAndCowsGuess BullsAndCowsCount) const
+{
+	std::cout << BullsAndCowsCount.Guess << " has " << BullsAndCowsCount.Bulls + BullsAndCowsCount.Cows << " of " << GetMyIsogramWordLength() << " correct letters; " << BullsAndCowsCount.Bulls << " Bulls and " << BullsAndCowsCount.Cows << " Cows." << std::endl;
 	return;
 }
 
@@ -140,7 +122,7 @@ void FBullCowGame::WriteGuessedWords() const
 	std::cout << "Guessed Words: " << std::endl;
 	for (auto i = MyGuessedWords.begin(); i != MyGuessedWords.end(); ++i)
 	{
-		i->first == MyGuess ? std::cout << "	-> " : std::cout << "	";
+		i->first == MyIsogramWord ? std::cout << "	-> " : std::cout << "	";
 		std::cout << i->first << " Bulls: " << i->second.Bulls << " Cows: " << i->second.Cows << std::endl;
 	}
 }
@@ -153,6 +135,11 @@ void FBullCowGame::WriteGuessedLetters() const
 		std::cout << *i << " ";
 	}
 	std::cout << std::endl;
+}
+
+bool FBullCowGame::GuessedRight(const FString Guess) const
+{
+	return Guess == MyIsogramWord;
 }
 
 void FBullCowGame::WriteResult() const
@@ -212,7 +199,7 @@ bool FBullCowGame::IsIsogram(const FString Word) const
 	return Letters.size() == Word.length();
 }
 
-int32 FBullCowGame::GetMyGuessWordLength() const
+int32 FBullCowGame::GetMyIsogramWordLength() const
 {
-	return MyGuess.length();
+	return MyIsogramWord.length();
 }

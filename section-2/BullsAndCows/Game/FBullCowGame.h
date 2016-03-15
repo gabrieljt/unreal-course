@@ -10,18 +10,20 @@
 using FString = std::string;
 using int32 = int;
 
-struct EBullsAndCowsCount
+struct EBullsAndCowsGuess
 {
 public:
-	EBullsAndCowsCount();
+	EBullsAndCowsGuess(const int32 Bulls, const int32 Cows, const FString Guess)
+		: Bulls(Bulls)
+		, Cows(Cows)
+		, Guess(Guess)
+	{
+	}
 
-	EBullsAndCowsCount(const int32, const int32);
-
-	int32 Bulls;
-	int32 Cows;
+	const FString Guess;
+	const int32 Bulls;
+	const int32 Cows;
 };
-
-enum EWordStatus;
 
 class FBullCowGame
 {
@@ -37,22 +39,24 @@ public:
 private:
 	void				WriteIntro() const;
 	void				RunGuessLoop();
-	FString				ReadValidGuessInput() const;
-	bool				IsValidGuessInput(const FString) const;
-	bool				CheckBullsAndCowsCount(const FString, EBullsAndCowsCount&);
-	void				WriteBullsAndCowsCount(const FString, const EBullsAndCowsCount) const;
+	FString				ReadGuessInput() const;
+	bool				IsValidInput(const FString) const;
+	EBullsAndCowsGuess	ProcessBullsAndCowsGuess(const FString);
+	void				SaveBullsAndCowsGuess(const FString, const EBullsAndCowsGuess);
+	void				WriteBullsAndCowsGuess(const EBullsAndCowsGuess) const;
 	void				WriteGuessedWords() const;
 	void				WriteGuessedLetters() const;
+	bool				GuessedRight(const FString) const;
 	void				WriteResult() const;
 	FString				ToLower(const FString) const;
 	bool				IsIsogram(const FString) const;
-	int32				GetMyGuessWordLength() const;
+	int32				GetMyIsogramWordLength() const;
 
-	const FString							MyGuess;
+	const FString							MyIsogramWord;
 	const int32								MyMaximumTries;
 	int32									MyCurrentTry;
 	bool									bMyGuessedRight;
 	std::set<char>							MyGuessedLetters;
-	std::map<FString, EBullsAndCowsCount>	MyGuessedWords;
+	std::map<FString, EBullsAndCowsGuess>	MyGuessedWords;
 	static const FString					MyIsogramWords[];
 };
