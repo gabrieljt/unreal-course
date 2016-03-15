@@ -53,7 +53,7 @@ private:
 	void				WriteBullsAndCowsGuess(const EBullsAndCowsGuess) const;
 	void				WriteGuessedWords() const;
 	void				WriteGuessedLetters() const;
-	bool				GuessedRight(const FString) const;
+	bool				GuessedRight(const int32) const;
 	void				WriteResult() const;
 	FString				ToLower(const FString) const;
 	bool				IsIsogram(const FString) const;

@@ -61,15 +61,15 @@ void FBullCowGame::RunGuessLoop()
 
 		case EGuessStatus::OK:
 			++MyCurrentTry;
-			EBullsAndCowsGuess BullsAndCowsCount = ProcessBullsAndCowsGuess(Guess);
-			SaveBullsAndCowsGuess(Guess, BullsAndCowsCount);
-			WriteBullsAndCowsGuess(BullsAndCowsCount);
+			EBullsAndCowsGuess BullsAndCowsGuess = ProcessBullsAndCowsGuess(Guess);
+			SaveBullsAndCowsGuess(Guess, BullsAndCowsGuess);
+			WriteBullsAndCowsGuess(BullsAndCowsGuess);
 			WriteGuessedWords();
 			WriteGuessedLetters();
-			bMyGuessedRight = GuessedRight(Guess);
+			bMyGuessedRight = GuessedRight(BullsAndCowsGuess.Bulls);
 			break;
 		}
-	} while (MyCurrentTry < MyMaximumTries || !bMyGuessedRight);
+	} while (MyCurrentTry < MyMaximumTries && !bMyGuessedRight);
 
 	return;
 }
@@ -146,9 +146,9 @@ void FBullCowGame::WriteGuessedLetters() const
 	std::cout << std::endl;
 }
 
-bool FBullCowGame::GuessedRight(const FString Guess) const
+bool FBullCowGame::GuessedRight(const int32 Bulls) const
 {
-	return Guess == MyIsogramWord;
+	return Bulls == GetMyIsogramWordLength();
 }
 
 void FBullCowGame::WriteResult() const
