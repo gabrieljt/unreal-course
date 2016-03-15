@@ -19,8 +19,9 @@ void UPositionReporter::BeginPlay()
 {
 	Super::BeginPlay();
 	// ...
-	FString MyName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s reporting."), *MyName);
+	FString Name = GetOwner()->GetName();
+	FString Position = GetOwner()->GetTransform().GetLocation().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("%s reporting @%s"), *Name, *Position);
 }
 
 // Called every frame
