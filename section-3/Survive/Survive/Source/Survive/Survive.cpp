@@ -2,4 +2,4 @@
 
 #include "Survive.h"
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Survive, "Survive" );
+IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, Survive, "Survive");
