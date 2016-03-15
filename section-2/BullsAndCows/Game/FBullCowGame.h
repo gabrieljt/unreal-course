@@ -10,17 +10,15 @@
 using FString = std::string;
 using int32 = int;
 
-struct EBullsAndCowsGuess
+struct EBullsAndCows
 {
 public:
-	EBullsAndCowsGuess(const int32 Bulls, const int32 Cows, const FString Guess)
+	EBullsAndCows(const int32 Bulls, const int32 Cows)
 		: Bulls(Bulls)
 		, Cows(Cows)
-		, Guess(Guess)
 	{
 	}
 
-	const FString Guess;
 	const int32 Bulls;
 	const int32 Cows;
 };
@@ -49,9 +47,9 @@ private:
 	void				RunGuessLoop();
 	FString				ReadGuessInput() const;
 	EGuessStatus		ProcessInput(const FString) const;
-	EBullsAndCowsGuess	ProcessBullsAndCowsGuess(const FString);
-	void				SaveBullsAndCowsGuess(const FString, const EBullsAndCowsGuess);
-	void				WriteBullsAndCowsGuess(const EBullsAndCowsGuess) const;
+	EBullsAndCows		ProcessBullsAndCows(const FString);
+	void				SaveBullsAndCows(const FString, const EBullsAndCows);
+	void				WriteBullsAndCows(const FString, const EBullsAndCows) const;
 	void				WriteGuessedWords() const;
 	void				WriteGuessedLetters() const;
 	bool				GuessedRight(const int32) const;
@@ -66,6 +64,6 @@ private:
 	int32									MyCurrentTry;
 	bool									bMyGuessedRight;
 	std::set<char>							MyGuessedLetters;
-	std::map <FString, EBullsAndCowsGuess>	MyGuessedWords;
+	std::map <FString, EBullsAndCows>	MyGuessedWords;
 	static const FString					MyIsogramWords[];
 };

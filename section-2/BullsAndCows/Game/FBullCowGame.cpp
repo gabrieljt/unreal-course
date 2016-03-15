@@ -65,16 +65,16 @@ void FBullCowGame::RunGuessLoop()
 
 		case EGuessStatus::OK:
 			++MyCurrentTry;
-			EBullsAndCowsGuess BullsAndCowsGuess = ProcessBullsAndCowsGuess(Guess);
-			SaveBullsAndCowsGuess(Guess, BullsAndCowsGuess);
+			EBullsAndCows BullsAndCows = ProcessBullsAndCows(Guess);
+			SaveBullsAndCows(Guess, BullsAndCows);
 			std::cout << std::endl;
-			WriteBullsAndCowsGuess(BullsAndCowsGuess);
+			WriteBullsAndCows(Guess, BullsAndCows);
 			std::cout << std::endl;
 			WriteGuessedLetters();
 			std::cout << std::endl;
 			WriteGuessedWords();
 			std::cout << std::endl;
-			bMyGuessedRight = GuessedRight(BullsAndCowsGuess.Bulls);
+			bMyGuessedRight = GuessedRight(BullsAndCows.Bulls);
 			break;
 		}
 	} while (MyCurrentTry < MyMaximumTries && !bMyGuessedRight);
@@ -107,7 +107,7 @@ EGuessStatus FBullCowGame::ProcessInput(const FString Word) const
 	return  EGuessStatus::OK;
 }
 
-EBullsAndCowsGuess FBullCowGame::ProcessBullsAndCowsGuess(const FString Guess)
+EBullsAndCows FBullCowGame::ProcessBullsAndCows(const FString Guess)
 {
 	int32 Bulls = 0, Cows = 0;
 
@@ -123,18 +123,18 @@ EBullsAndCowsGuess FBullCowGame::ProcessBullsAndCowsGuess(const FString Guess)
 		}
 	}
 
-	return EBullsAndCowsGuess(Bulls, Cows, Guess);
+	return EBullsAndCows(Bulls, Cows);
 }
 
-void FBullCowGame::SaveBullsAndCowsGuess(const FString Guess, const EBullsAndCowsGuess BullsAndCowsGuess)
+void FBullCowGame::SaveBullsAndCows(const FString Guess, const EBullsAndCows BullsAndCows)
 {
-	MyGuessedWords.insert(std::pair<FString, EBullsAndCowsGuess>(Guess, BullsAndCowsGuess));
+	MyGuessedWords.insert(std::pair<FString, EBullsAndCows>(Guess, BullsAndCows));
 	return;
 }
 
-void FBullCowGame::WriteBullsAndCowsGuess(const EBullsAndCowsGuess BullsAndCowsCount) const
+void FBullCowGame::WriteBullsAndCows(const FString Guess, const EBullsAndCows BullsAndCowsCount) const
 {
-	std::cout << BullsAndCowsCount.Guess << " has " << BullsAndCowsCount.Bulls + BullsAndCowsCount.Cows << " of " << GetMyIsogramWordLength() << " correct letters; " << BullsAndCowsCount.Bulls << " Bulls and " << BullsAndCowsCount.Cows << " Cows." << std::endl;
+	std::cout << Guess << " has " << BullsAndCowsCount.Bulls + BullsAndCowsCount.Cows << " of " << GetMyIsogramWordLength() << " correct letters; " << BullsAndCowsCount.Bulls << " Bulls and " << BullsAndCowsCount.Cows << " Cows." << std::endl;
 	return;
 }
 
@@ -213,8 +213,7 @@ bool FBullCowGame::IsIsogram(const FString Word) const
 
 	for (char Letter : Word)
 	{
-		bool bIsDistinctLetter = DistinctLetters.insert(Letter).second;
-		if (!bIsDistinctLetter)
+		if (!DistinctLetters.insert(Letter).second)
 		{
 			return false;
 		}
