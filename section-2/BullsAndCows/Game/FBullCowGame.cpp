@@ -38,7 +38,7 @@ bool FBullCowGame::HasGuessedRight() const
 void FBullCowGame::WriteIntro() const
 {
 	std::cout << "Welcome to Bulls and Cows!" << std::endl;
-	std::cout << "Can you guess the " << GetMyIsogramWordLength() << " letter isogram I'm thinking of?" << std::endl;
+	std::cout << "Can you guess the " << GetMyIsogramWordLength() << " letter isogram I'm thinking of?" << std::endl << std::endl;;
 	return;
 }
 
@@ -59,13 +59,21 @@ void FBullCowGame::RunGuessLoop()
 			std::cout << "Your guess must be an isogram (no repeated letters)." << std::endl;
 			break;
 
+		case EGuessStatus::Already_Guessed:
+			std::cout << "The word '" << Guess << "' was already guessed!" << std::endl;
+			break;
+
 		case EGuessStatus::OK:
 			++MyCurrentTry;
 			EBullsAndCowsGuess BullsAndCowsGuess = ProcessBullsAndCowsGuess(Guess);
 			SaveBullsAndCowsGuess(Guess, BullsAndCowsGuess);
+			std::cout << std::endl;
 			WriteBullsAndCowsGuess(BullsAndCowsGuess);
-			WriteGuessedWords();
+			std::cout << std::endl;
 			WriteGuessedLetters();
+			std::cout << std::endl;
+			WriteGuessedWords();
+			std::cout << std::endl;
 			bMyGuessedRight = GuessedRight(BullsAndCowsGuess.Bulls);
 			break;
 		}
@@ -90,6 +98,10 @@ EGuessStatus FBullCowGame::ProcessInput(const FString Word) const
 	else if (!IsIsogram(Word))
 	{
 		return EGuessStatus::Not_Isogram;
+	}
+	else if (WasAlreadyGuessed(Word))
+	{
+		return EGuessStatus::Already_Guessed;
 	}
 
 	return  EGuessStatus::OK;
@@ -174,8 +186,7 @@ bool FBullCowGame::AskToPlayAgain() const
 	{
 		std::cout << "Do you want to play again? (y/n)" << std::endl;
 		std::getline(std::cin, Answer);
-		Answer = ToLower(Answer);
-		cAnswer = Answer[0];
+		cAnswer = ToLower(Answer)[0];
 
 		if (cAnswer == 'y' || cAnswer == 'n')
 		{
@@ -210,6 +221,11 @@ bool FBullCowGame::IsIsogram(const FString Word) const
 	}
 
 	return true;
+}
+
+bool FBullCowGame::WasAlreadyGuessed(const FString Guess) const
+{
+	return MyGuessedWords.find(Guess) != MyGuessedWords.end();
 }
 
 int32 FBullCowGame::GetMyIsogramWordLength() const

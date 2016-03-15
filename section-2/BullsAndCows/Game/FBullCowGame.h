@@ -29,7 +29,8 @@ enum class EGuessStatus
 {
 	OK,
 	Wrong_Length,
-	Not_Isogram
+	Not_Isogram,
+	Already_Guessed,
 };
 
 class FBullCowGame
@@ -57,6 +58,7 @@ private:
 	void				WriteResult() const;
 	FString				ToLower(const FString) const;
 	bool				IsIsogram(const FString) const;
+	bool				WasAlreadyGuessed(const FString) const;
 	int32				GetMyIsogramWordLength() const;
 
 	const FString							MyIsogramWord;
