@@ -44,12 +44,10 @@ void FBullCowGame::WriteIntro() const
 
 void FBullCowGame::RunGuessLoop()
 {
-	FString Guess = "";
-
 	do
 	{
 		std::cout << "Try " << MyCurrentTry + 1 << " of " << MyMaximumTries << ". Type your guess: ";
-		Guess = ToLower(ReadGuessInput());
+		FString Guess = ToLower(ReadGuessInput());
 		EGuessStatus GuessStatus = ProcessInput(Guess);
 		switch (GuessStatus)
 		{
