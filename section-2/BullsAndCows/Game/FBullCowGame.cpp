@@ -51,15 +51,15 @@ void FBullCowGame::RunGuessLoop()
 		EGuessStatus GuessStatus = ProcessInput(Guess);
 		switch (GuessStatus)
 		{
-		case EGuessStatus::Wrong_Length:
+		case EGuessStatus::WrongLength:
 			std::cout << "Your guess must have " << GetMyIsogramWordLength() << " letters." << std::endl;
 			break;
 
-		case EGuessStatus::Not_Isogram:
+		case EGuessStatus::NotIsogram:
 			std::cout << "Your guess must be an isogram (no repeated letters)." << std::endl;
 			break;
 
-		case EGuessStatus::Already_Guessed:
+		case EGuessStatus::AlreadyGuessed:
 			std::cout << "The word '" << Guess << "' was already guessed!" << std::endl;
 			break;
 
@@ -93,15 +93,15 @@ EGuessStatus FBullCowGame::ProcessInput(const FString Word) const
 {
 	if (Word.length() != GetMyIsogramWordLength())
 	{
-		return EGuessStatus::Wrong_Length;
+		return EGuessStatus::WrongLength;
 	}
 	else if (!IsIsogram(Word))
 	{
-		return EGuessStatus::Not_Isogram;
+		return EGuessStatus::NotIsogram;
 	}
 	else if (WasAlreadyGuessed(Word))
 	{
-		return EGuessStatus::Already_Guessed;
+		return EGuessStatus::AlreadyGuessed;
 	}
 
 	return  EGuessStatus::OK;

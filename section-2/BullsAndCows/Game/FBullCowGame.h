@@ -28,9 +28,9 @@ public:
 enum class EGuessStatus
 {
 	OK,
-	Wrong_Length,
-	Not_Isogram,
-	Already_Guessed,
+	WrongLength,
+	NotIsogram,
+	AlreadyGuessed,
 };
 
 class FBullCowGame
