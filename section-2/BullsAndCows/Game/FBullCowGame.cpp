@@ -16,7 +16,7 @@ FBullCowGame::~FBullCowGame()
 
 FString FBullCowGame::GetIsogramWord()
 {
-	const int Index = std::rand() % 3;
+	const int32 Index = std::rand() % 3;
 	return MyIsogramWords[Index];
 }
 
@@ -50,8 +50,18 @@ void FBullCowGame::RunGuessLoop()
 	{
 		std::cout << "Try " << MyCurrentTry + 1 << " of " << MyMaximumTries << ". Type your guess: ";
 		Guess = ToLower(ReadGuessInput());
-		if (IsValidInput(Guess))
+		EGuessStatus GuessStatus = ProcessInput(Guess);
+		switch (GuessStatus)
 		{
+		case EGuessStatus::Wrong_Length:
+			std::cout << "Your guess must have " << GetMyIsogramWordLength() << " letters." << std::endl;
+			break;
+
+		case EGuessStatus::Not_Isogram:
+			std::cout << "Your guess must be an isogram (no repeated letters)." << std::endl;
+			break;
+
+		case EGuessStatus::OK:
 			++MyCurrentTry;
 			EBullsAndCowsGuess BullsAndCowsCount = ProcessBullsAndCowsGuess(Guess);
 			SaveBullsAndCowsGuess(Guess, BullsAndCowsCount);
@@ -64,10 +74,7 @@ void FBullCowGame::RunGuessLoop()
 				bMyGuessedRight = true;
 				return;
 			}
-		}
-		else
-		{
-			std::cout << "Your guess must be an isogram (no repeated letters) and must have " << GetMyIsogramWordLength() << " letters." << std::endl;
+			break;
 		}
 	} while (MyCurrentTry < MyMaximumTries);
 
@@ -81,9 +88,18 @@ FString FBullCowGame::ReadGuessInput() const
 	return Guess;
 }
 
-bool FBullCowGame::IsValidInput(const FString Word) const
+EGuessStatus FBullCowGame::ProcessInput(const FString Word) const
 {
-	return Word.length() == GetMyIsogramWordLength() && IsIsogram(Word);
+	if (Word.length() != GetMyIsogramWordLength())
+	{
+		return EGuessStatus::Wrong_Length;
+	}
+	else if (!IsIsogram(Word))
+	{
+		return EGuessStatus::Not_Isogram;
+	}
+
+	return  EGuessStatus::OK;
 }
 
 EBullsAndCowsGuess FBullCowGame::ProcessBullsAndCowsGuess(const FString Guess)

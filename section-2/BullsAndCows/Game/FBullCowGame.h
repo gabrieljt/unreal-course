@@ -25,6 +25,13 @@ public:
 	const int32 Cows;
 };
 
+enum class EGuessStatus
+{
+	OK,
+	Wrong_Length,
+	Not_Isogram
+};
+
 class FBullCowGame
 {
 public:
@@ -40,7 +47,7 @@ private:
 	void				WriteIntro() const;
 	void				RunGuessLoop();
 	FString				ReadGuessInput() const;
-	bool				IsValidInput(const FString) const;
+	EGuessStatus		ProcessInput(const FString) const;
 	EBullsAndCowsGuess	ProcessBullsAndCowsGuess(const FString);
 	void				SaveBullsAndCowsGuess(const FString, const EBullsAndCowsGuess);
 	void				WriteBullsAndCowsGuess(const EBullsAndCowsGuess) const;
