@@ -8,7 +8,7 @@ int main()
 	do
 	{
 		FBullCowGame BullCowGame(FBullCowGame::GetIsogramWord(), MaximumTries);
-		BullCowGame.RunGame();
+		BullCowGame.PlayGame();
 		if (BullCowGame.HasGuessedRight())
 		{
 			++Score;

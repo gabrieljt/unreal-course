@@ -22,7 +22,7 @@ FString FBullCowGame::GetIsogramWord()
 
 const FString FBullCowGame::MyIsogramWords[] = { "play", "plot", "puny" };
 
-void FBullCowGame::RunGame()
+void FBullCowGame::PlayGame()
 {
 	WriteIntro();
 	RunGuessLoop();
@@ -198,14 +198,18 @@ FString FBullCowGame::ToLower(const FString Word) const
 
 bool FBullCowGame::IsIsogram(const FString Word) const
 {
-	std::unordered_set<char> Letters;
+	std::unordered_set<char> DistinctLetters;
 
-	for (int32 i = 0; i < Word.length(); ++i)
+	for (char Letter : Word)
 	{
-		Letters.insert(Word[i]);
+		bool bIsDistinctLetter = DistinctLetters.insert(Letter).second;
+		if (!bIsDistinctLetter)
+		{
+			return false;
+		}
 	}
 
-	return Letters.size() == Word.length();
+	return true;
 }
 
 int32 FBullCowGame::GetMyIsogramWordLength() const
