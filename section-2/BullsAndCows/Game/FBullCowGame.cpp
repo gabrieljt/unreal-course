@@ -66,15 +66,10 @@ void FBullCowGame::RunGuessLoop()
 			WriteBullsAndCowsGuess(BullsAndCowsCount);
 			WriteGuessedWords();
 			WriteGuessedLetters();
-
-			if (GuessedRight(Guess))
-			{
-				bMyGuessedRight = true;
-				return;
-			}
+			bMyGuessedRight = GuessedRight(Guess);
 			break;
 		}
-	} while (MyCurrentTry < MyMaximumTries);
+	} while (MyCurrentTry < MyMaximumTries || !bMyGuessedRight);
 
 	return;
 }
