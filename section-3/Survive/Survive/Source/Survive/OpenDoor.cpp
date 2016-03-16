@@ -20,7 +20,7 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 
 	AActor* Owner = GetOwner();
-	Owner->SetActorRotation(FRotator(0.f, 30.f, 0.f));
+	Owner->SetActorRotation(FRotator(0.f, MyOpenAngle, 0.f));
 }
 
 // Called every frame
