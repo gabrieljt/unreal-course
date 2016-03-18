@@ -18,6 +18,8 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	OpenerActor = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
 
 // Called every frame
