@@ -18,8 +18,6 @@ UOpenDoor::UOpenDoor()
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Perform();
 }
 
 // Called every frame
@@ -27,10 +25,13 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (OpenerTriggerVolume->IsOverlappingActor(OpenerActor))
+	{
+		OpenDoor();
+	}
 }
 
-void UOpenDoor::Perform() const
+void UOpenDoor::OpenDoor() const
 {
 	AActor* Owner = GetOwner();
 	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
