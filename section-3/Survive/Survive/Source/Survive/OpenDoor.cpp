@@ -19,8 +19,7 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* Owner = GetOwner();
-	Owner->SetActorRotation(FRotator(0.f, MyOpenAngle, 0.f));
+	Perform();
 }
 
 // Called every frame
@@ -29,4 +28,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UOpenDoor::Perform() const
+{
+	AActor* Owner = GetOwner();
+	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
 }
