@@ -29,6 +29,5 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* OpenerTriggerVolume;
 
-	UPROPERTY(EditAnywhere)
 	AActor* OpenerActor;
 };
