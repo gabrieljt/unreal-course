@@ -33,6 +33,7 @@
 *.sln
 *.suo
 *.opensdf
+*.opendb
 *.sdf
 
 # Precompiled Assets
