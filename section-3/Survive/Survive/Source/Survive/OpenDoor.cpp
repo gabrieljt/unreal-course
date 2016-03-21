@@ -10,8 +10,6 @@ UOpenDoor::UOpenDoor()
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 // Called when the game starts
@@ -29,11 +27,11 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (OpenerTriggerVolume->IsOverlappingActor(OpenerActor))
 	{
-		OpenDoor();
+		Open();
 	}
 }
 
-void UOpenDoor::OpenDoor() const
+void UOpenDoor::Open() const
 {
 	AActor* Owner = GetOwner();
 	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));

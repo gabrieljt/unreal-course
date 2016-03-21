@@ -21,7 +21,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;	
 
 private:
-	void OpenDoor() const;
+	void Open() const;
 
 	UPROPERTY(EditAnywhere)
 	float OpenAngle = 90.0f;
