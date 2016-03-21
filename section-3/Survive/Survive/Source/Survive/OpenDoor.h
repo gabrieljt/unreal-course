@@ -18,16 +18,27 @@ public:
 	virtual void BeginPlay() override;
 
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;	
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	void Open() const;
 
-	UPROPERTY(EditAnywhere)
-	float OpenAngle = 90.0f;
+	void Close() const;
 
-	UPROPERTY(EditAnywhere)
-	ATriggerVolume* OpenerTriggerVolume;
+	AActor* Owner;
 
 	AActor* OpenerActor;
+
+	float LastOpenedTime;
+
+	float CloseAngle;
+
+	UPROPERTY(EditAnywhere)
+		ATriggerVolume* OpenerTriggerVolume;
+
+	UPROPERTY(EditAnywhere)
+		float OpenAngle = 90.f;
+
+	UPROPERTY(EditAnywhere)
+		float CloseDelay = 1.0f;
 };
