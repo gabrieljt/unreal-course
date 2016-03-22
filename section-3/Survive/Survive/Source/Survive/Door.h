@@ -3,16 +3,16 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "OpenDoor.generated.h"
+#include "Door.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class SURVIVE_API UOpenDoor : public UActorComponent
+class SURVIVE_API UDoor : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this component's properties
-	UOpenDoor();
+	UDoor();
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
