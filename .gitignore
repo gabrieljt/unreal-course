@@ -62,4 +62,5 @@
 **/Debug/*
 
 # Unreal Starter Content
-**/StarterContent/*
+**/StarterContent/Textures
+**/StarterContent/HDRI
