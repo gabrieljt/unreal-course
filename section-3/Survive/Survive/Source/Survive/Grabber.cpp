@@ -25,7 +25,7 @@ void UGrabber::BeginPlay()
 
 	if (!PhysicsHandle)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Grabber Component of %s could not find the UPhysicsHandleComponent"), *(GetOwner()->GetName()))
+		UE_LOG(LogTemp, Error, TEXT("Grabber Component of %s could not find the UPhysicsHandleComponent"), *GetOwner()->GetName());
 	}
 }
 
@@ -66,9 +66,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Grabber looking from %s location with @%s rotation can reach %s"),
-			*(PlayerViewPointLocation.ToString()),
-			*(PlayerViewPointRotation.ToString()),
-			*(TraceHit.GetActor()->GetName())
+			*PlayerViewPointLocation.ToString(),
+			*PlayerViewPointRotation.ToString(),
+			*TraceHit.GetActor()->GetName()
 			);
 	}
 }
