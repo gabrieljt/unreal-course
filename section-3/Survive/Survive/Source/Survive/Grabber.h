@@ -23,6 +23,8 @@ public:
 private:
 	void Grab();
 
+	void Release();
+
 	UPROPERTY(EditAnywhere)
 		float Reach = 100.f;
 

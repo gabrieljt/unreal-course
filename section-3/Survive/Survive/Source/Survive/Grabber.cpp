@@ -29,6 +29,7 @@ void UGrabber::BeginPlay()
 	else
 	{
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Release", IE_Released, this, &UGrabber::Release);
 	}
 
 	PhysicsHandleComponent = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
@@ -41,6 +42,11 @@ void UGrabber::BeginPlay()
 void UGrabber::Grab() 
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab()"));
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Release()"));
 }
 
 // Called every frame
