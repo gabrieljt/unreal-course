@@ -11,13 +11,10 @@ class SURVIVE_API UDoor : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UDoor();
 
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
