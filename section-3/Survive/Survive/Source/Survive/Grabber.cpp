@@ -5,43 +5,60 @@
 
 #define OUT
 
-// Sets default values for this component's properties
 UGrabber::UGrabber()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-// Called when the game starts
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	SetupInputComponent();
+	FindPhysicsHandleComponent();
 }
 
-// Called every frame
+void UGrabber::SetupInputComponent()
+{
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (!InputComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Grabber Component of %s could not find the UInputComponent"), *GetOwner()->GetName())
+	}
+	else
+	{
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+	}
+}
+
+void UGrabber::FindPhysicsHandleComponent()
+{
+	PhysicsHandleComponent = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (!PhysicsHandleComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Grabber Component of %s could not find the UPhysicsHandleComponent"), *GetOwner()->GetName())
+	}
+}
+
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
+	if (PhysicsHandleComponent->GrabbedComponent)
+	{
+		SetGrabbedComponentLocation();
+	}
+}
 
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,
-		OUT PlayerViewPointRotation
-		);
-
-	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+void UGrabber::SetGrabbedComponentLocation()
+{
+	EGrabberCoordinates GrabberCoordinates = GetGrabberCoordinates();
 
 	DrawDebugLine(GetWorld(),
-		PlayerViewPointLocation,
-		LineTraceEnd,
+		GrabberCoordinates.OriginLocation,
+		GrabberCoordinates.TargetLocation,
 		FColor(255, 0, 0),
 		false,
 		0.f,
@@ -49,21 +66,52 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		10.f
 		);
 
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+	UPositionReporter* GrabbedObjectReporter = PhysicsHandleComponent->GrabbedComponent->GetOwner()->FindComponentByClass<UPositionReporter>();
+	if (GrabbedObjectReporter)
+	{
+		GrabbedObjectReporter->Report();
+	}
+
+	PhysicsHandleComponent->SetTargetLocation(GetGrabberCoordinates().TargetLocation);
+}
+
+UGrabber::EGrabberCoordinates UGrabber::GetGrabberCoordinates() const
+{
+	FVector Location;
+	FRotator Rotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT Location,
+		OUT Rotation
+		);
+	return EGrabberCoordinates(Location, Rotation, Reach);
+}
+
+void UGrabber::Grab()
+{
 	FHitResult TraceHit;
+	EGrabberCoordinates GrabberCoordinates = GetGrabberCoordinates();
 
 	if (GetWorld()->LineTraceSingleByObjectType(
 		OUT TraceHit,
-		PlayerViewPointLocation,
-		LineTraceEnd,
+		GrabberCoordinates.OriginLocation,
+		GrabberCoordinates.TargetLocation,
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		TraceParameters
 		))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Grabber looking from %s location with @%s rotation can reach %s"),
-			*(PlayerViewPointLocation.ToString()),
-			*(PlayerViewPointRotation.ToString()),
-			*(TraceHit.GetActor()->GetName())
-			);
+		if (TraceHit.GetActor())
+		{
+			PhysicsHandleComponent->GrabComponent(
+				TraceHit.GetComponent(),
+				NAME_None,
+				TraceHit.GetComponent()->GetOwner()->GetActorLocation(),
+				true
+				);
+		}
 	}
+}
+
+void UGrabber::Release()
+{
+	PhysicsHandleComponent->ReleaseComponent();
 }
