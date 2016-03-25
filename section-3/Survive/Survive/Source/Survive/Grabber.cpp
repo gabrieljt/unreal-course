@@ -48,26 +48,31 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	if (PhysicsHandleComponent->GrabbedComponent)
 	{
-		EGrabberCoordinates GrabberCoordinates = GetGrabberCoordinates();
-
-		DrawDebugLine(GetWorld(),
-			GrabberCoordinates.OriginLocation,
-			GrabberCoordinates.TargetLocation,
-			FColor(255, 0, 0),
-			false,
-			0.f,
-			0.f,
-			10.f
-			);
-
-		UPositionReporter* GrabbedObjectReporter = PhysicsHandleComponent->GrabbedComponent->GetOwner()->FindComponentByClass<UPositionReporter>();
-		if (GrabbedObjectReporter)
-		{
-			GrabbedObjectReporter->Report();
-		}
-
-		PhysicsHandleComponent->SetTargetLocation(GetGrabberCoordinates().TargetLocation);
+		SetGrabbedComponentLocation();
 	}
+}
+
+void UGrabber::SetGrabbedComponentLocation()
+{
+	EGrabberCoordinates GrabberCoordinates = GetGrabberCoordinates();
+
+	DrawDebugLine(GetWorld(),
+		GrabberCoordinates.OriginLocation,
+		GrabberCoordinates.TargetLocation,
+		FColor(255, 0, 0),
+		false,
+		0.f,
+		0.f,
+		10.f
+		);
+
+	UPositionReporter* GrabbedObjectReporter = PhysicsHandleComponent->GrabbedComponent->GetOwner()->FindComponentByClass<UPositionReporter>();
+	if (GrabbedObjectReporter)
+	{
+		GrabbedObjectReporter->Report();
+	}
+
+	PhysicsHandleComponent->SetTargetLocation(GetGrabberCoordinates().TargetLocation);
 }
 
 UGrabber::EGrabberCoordinates UGrabber::GetGrabberCoordinates() const

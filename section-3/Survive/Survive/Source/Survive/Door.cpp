@@ -14,7 +14,6 @@ void UDoor::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = GetOwner();
-	OpenerActor = GetWorld()->GetFirstPlayerController()->GetPawn();
 	CloseAngle = Owner->GetTransform().Rotator().Yaw;
 }
 

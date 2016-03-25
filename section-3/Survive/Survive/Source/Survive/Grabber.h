@@ -38,6 +38,8 @@ private:
 
 	void FindPhysicsHandleComponent();
 
+	void SetGrabbedComponentLocation();
+
 	EGrabberCoordinates GetGrabberCoordinates() const;
 
 	void Grab();

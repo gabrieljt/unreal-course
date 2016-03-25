@@ -31,11 +31,12 @@ private:
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* OpenerTriggerVolume = nullptr;
 
+	UPROPERTY(EditAnywhere)
+		AActor* OpenerActor = nullptr;
+
 	float LastOpenedTime = 0.f;
 
 	float CloseAngle = 0.f;
 
 	AActor* Owner = nullptr;
-
-	AActor* OpenerActor = nullptr;
 };
