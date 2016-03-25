@@ -21,17 +21,26 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Input = GetOwner()->FindComponentByClass<UInputComponent>();
-	if (!Input)
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (!InputComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Grabber Component of %s could not find the UInputComponent"), *GetOwner()->GetName());
 	}
+	else
+	{
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
 
-	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (!PhysicsHandle)
+	PhysicsHandleComponent = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (!PhysicsHandleComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Grabber Component of %s could not find the UPhysicsHandleComponent"), *GetOwner()->GetName());
 	}
+}
+
+void UGrabber::Grab() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grab()"));
 }
 
 // Called every frame
