@@ -46,15 +46,13 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	SetGrabberParameters();
-
-	if (bIsGrabbing)
+	if (PhysicsHandleComponent->GrabbedComponent)
 	{
-		FVector GrabLocation = GetGrabLocation();
+		EGrabberCoordinates GrabberCoordinates = GetGrabberCoordinates();
 
 		DrawDebugLine(GetWorld(),
-			Location,
-			GrabLocation,
+			GrabberCoordinates.OriginLocation,
+			GrabberCoordinates.TargetLocation,
 			FColor(255, 0, 0),
 			false,
 			0.f,
@@ -62,46 +60,53 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 			10.f
 			);
 
-		UPositionReporter* GrabbedObjectReporter = GrabbedObject->FindComponentByClass<UPositionReporter>();
+		UPositionReporter* GrabbedObjectReporter = PhysicsHandleComponent->GrabbedComponent->GetOwner()->FindComponentByClass<UPositionReporter>();
 		if (GrabbedObjectReporter)
 		{
 			GrabbedObjectReporter->Report();
 		}
+
+		PhysicsHandleComponent->SetTargetLocation(GetGrabberCoordinates().TargetLocation);
 	}
 }
 
-void UGrabber::SetGrabberParameters()
+UGrabber::EGrabberCoordinates UGrabber::GetGrabberCoordinates() const
 {
+	FVector Location;
+	FRotator Rotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
 		OUT Location,
 		OUT Rotation
 		);
-}
-
-FVector UGrabber::GetGrabLocation() const
-{
-	return Location + Rotation.Vector() * Reach;
+	return EGrabberCoordinates(Location, Rotation, Reach);
 }
 
 void UGrabber::Grab()
 {
 	FHitResult TraceHit;
+	EGrabberCoordinates GrabberCoordinates = GetGrabberCoordinates();
 
 	if (GetWorld()->LineTraceSingleByObjectType(
 		OUT TraceHit,
-		Location,
-		GetGrabLocation(),
+		GrabberCoordinates.OriginLocation,
+		GrabberCoordinates.TargetLocation,
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		TraceParameters
 		))
 	{
-		bIsGrabbing = true;
-		GrabbedObject = TraceHit.GetActor();
+		if (TraceHit.GetActor())
+		{
+			PhysicsHandleComponent->GrabComponent(
+				TraceHit.GetComponent(),
+				NAME_None,
+				TraceHit.GetComponent()->GetOwner()->GetActorLocation(),
+				true
+				);
+		}
 	}
 }
 
 void UGrabber::Release()
 {
-	bIsGrabbing = false;
-	GrabbedObject = nullptr;
+	PhysicsHandleComponent->ReleaseComponent();
 }

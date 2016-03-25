@@ -12,6 +12,21 @@ class SURVIVE_API UGrabber : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	struct EGrabberCoordinates
+	{
+	public:
+		EGrabberCoordinates(const FVector OriginLocation, const FRotator Rotator, const float Reach)
+			: OriginLocation(OriginLocation)
+			, TargetLocation(OriginLocation + Rotator.Vector() * Reach)
+			, Rotator(Rotator)
+		{
+		}
+
+		const FVector OriginLocation;
+		const FVector TargetLocation;
+		const FRotator Rotator;
+	};
+
 	UGrabber();
 
 	virtual void BeginPlay() override;
@@ -23,29 +38,18 @@ private:
 
 	void FindPhysicsHandleComponent();
 
-	void SetGrabberParameters();
-
-	FVector GetGrabLocation() const;
+	EGrabberCoordinates GetGrabberCoordinates() const;
 
 	void Grab();
 
 	void Release();
 
-	UPROPERTY(VisibleAnywhere)
-		bool bIsGrabbing = false;
-
 	UPROPERTY(EditAnywhere)
 		float Reach = 100.f;
-
-	FVector Location;
-
-	FRotator Rotation;
 
 	UInputComponent* InputComponent = nullptr;
 
 	UPhysicsHandleComponent* PhysicsHandleComponent = nullptr;
-
-	AActor* GrabbedObject = nullptr;
 
 	const FCollisionQueryParams TraceParameters = FCollisionQueryParams(FName(TEXT("")), false, GetOwner());
 };
