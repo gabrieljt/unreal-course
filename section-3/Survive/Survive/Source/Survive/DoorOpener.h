@@ -3,25 +3,21 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "Door.generated.h"
+#include "DoorOpener.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class SURVIVE_API UDoor : public UActorComponent
+class SURVIVE_API UDoorOpener : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	UDoor();
+	UDoorOpener();
 
 	virtual void BeginPlay() override;
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-private:
-	void Open() const;
-
-	void Close() const;
-
+protected:
 	UPROPERTY(EditAnywhere)
 		float OpenAngle;
 
@@ -32,9 +28,14 @@ private:
 		ATriggerVolume* OpenerTriggerVolume;
 
 	UPROPERTY(EditAnywhere)
-		AActor* OpenerActor;
+		bool bWantsToOpen;
 
 	float LastOpenedTime;
 
 	float CloseAngle;
+
+private:
+	void Open() const;
+
+	void Close() const;
 };
