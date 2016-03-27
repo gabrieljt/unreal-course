@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "PositionReporter.h"
 #include "Grabber.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -47,11 +46,11 @@ private:
 	void Release();
 
 	UPROPERTY(EditAnywhere)
-		float Reach = 100.f;
+		float Reach;
 
-	UInputComponent* InputComponent = nullptr;
+	UInputComponent* InputComponent;
 
-	UPhysicsHandleComponent* PhysicsHandleComponent = nullptr;
+	UPhysicsHandleComponent* PhysicsHandleComponent;
 
-	const FCollisionQueryParams TraceParameters = FCollisionQueryParams(FName(TEXT("")), false, GetOwner());
+	const FCollisionQueryParams TraceParameters;
 };

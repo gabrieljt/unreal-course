@@ -12,6 +12,12 @@ UPositionReporter::UPositionReporter()
 void UPositionReporter::BeginPlay()
 {
 	Super::BeginPlay();
+	Report();
+}
+
+void UPositionReporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
 void UPositionReporter::Report() const
@@ -20,9 +26,4 @@ void UPositionReporter::Report() const
 		*GetOwner()->GetName(),
 		*GetOwner()->GetTransform().GetLocation().ToString()
 		)
-}
-
-void UPositionReporter::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }

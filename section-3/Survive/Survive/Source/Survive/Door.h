@@ -23,20 +23,18 @@ private:
 	void Close() const;
 
 	UPROPERTY(EditAnywhere)
-		float OpenAngle = 90.f;
+		float OpenAngle;
 
 	UPROPERTY(EditAnywhere)
-		float CloseDelay = 1.0f;
+		float CloseDelay;
 
 	UPROPERTY(EditAnywhere)
-		ATriggerVolume* OpenerTriggerVolume = nullptr;
+		ATriggerVolume* OpenerTriggerVolume;
 
 	UPROPERTY(EditAnywhere)
-		AActor* OpenerActor = nullptr;
+		AActor* OpenerActor;
 
-	float LastOpenedTime = 0.f;
+	float LastOpenedTime;
 
-	float CloseAngle = 0.f;
-
-	AActor* Owner = nullptr;
+	float CloseAngle;
 };

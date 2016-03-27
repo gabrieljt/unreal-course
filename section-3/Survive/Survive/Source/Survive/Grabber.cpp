@@ -6,6 +6,9 @@
 #define OUT
 
 UGrabber::UGrabber()
+	: InputComponent(nullptr)
+	, PhysicsHandleComponent(nullptr)
+	, TraceParameters(FCollisionQueryParams(FName(TEXT("")), false, GetOwner()))
 {
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
@@ -54,24 +57,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 void UGrabber::SetGrabbedComponentLocation()
 {
-	EGrabberCoordinates GrabberCoordinates = GetGrabberCoordinates();
-
-	DrawDebugLine(GetWorld(),
-		GrabberCoordinates.OriginLocation,
-		GrabberCoordinates.TargetLocation,
-		FColor(255, 0, 0),
-		false,
-		0.f,
-		0.f,
-		10.f
-		);
-
-	UPositionReporter* GrabbedObjectReporter = PhysicsHandleComponent->GrabbedComponent->GetOwner()->FindComponentByClass<UPositionReporter>();
-	if (GrabbedObjectReporter)
-	{
-		GrabbedObjectReporter->Report();
-	}
-
 	PhysicsHandleComponent->SetTargetLocation(GetGrabberCoordinates().TargetLocation);
 }
 
