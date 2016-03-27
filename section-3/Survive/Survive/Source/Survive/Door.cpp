@@ -32,8 +32,7 @@ void UDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 		Open();
 		LastOpenedTime = GetWorld()->GetTimeSeconds();
 	}
-
-	if (GetWorld()->GetTimeSeconds() - LastOpenedTime >= CloseDelay)
+	else if (GetWorld()->GetTimeSeconds() - LastOpenedTime >= CloseDelay)
 	{
 		Close();
 	}
