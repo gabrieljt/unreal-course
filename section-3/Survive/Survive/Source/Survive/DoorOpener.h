@@ -3,40 +3,39 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "Door.generated.h"
+#include "DoorOpener.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class SURVIVE_API UDoor : public UActorComponent
+class SURVIVE_API UDoorOpener : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	UDoor();
+	UDoorOpener();
 
 	virtual void BeginPlay() override;
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+protected:
+	UPROPERTY(EditAnywhere)
+		float OpenAngle;
+
+	UPROPERTY(EditAnywhere)
+		float CloseDelay;
+
+	UPROPERTY(EditAnywhere)
+		ATriggerVolume* OpenerTriggerVolume;
+
+	UPROPERTY(EditAnywhere)
+		bool bWantsToOpen;
+
+	float LastOpenedTime;
+
+	float CloseAngle;
+
 private:
 	void Open() const;
 
 	void Close() const;
-
-	UPROPERTY(EditAnywhere)
-		float OpenAngle = 90.f;
-
-	UPROPERTY(EditAnywhere)
-		float CloseDelay = 1.0f;
-
-	UPROPERTY(EditAnywhere)
-		ATriggerVolume* OpenerTriggerVolume = nullptr;
-
-	UPROPERTY(EditAnywhere)
-		AActor* OpenerActor = nullptr;
-
-	float LastOpenedTime = 0.f;
-
-	float CloseAngle = 0.f;
-
-	AActor* Owner = nullptr;
 };
