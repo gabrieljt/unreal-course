@@ -18,8 +18,7 @@ void UActorDoorOpener::BeginPlay()
 	}
 }
 
-void UActorDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+bool UActorDoorOpener::WantsToOpen() const
 {
-	bWantsToOpen = OpenerTriggerVolume->IsOverlappingActor(OpenerActor);
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	return OpenerTriggerVolume->IsOverlappingActor(OpenerActor);
 }

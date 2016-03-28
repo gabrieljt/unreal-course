@@ -5,9 +5,6 @@
 #include "DoorOpener.h"
 #include "ActorDoorOpener.generated.h"
 
-/**
- *
- */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SURVIVE_API UActorDoorOpener : public UDoorOpener
 {
@@ -18,7 +15,8 @@ public:
 
 	virtual void BeginPlay() override;
 
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+protected:
+	virtual bool WantsToOpen() const override;
 
 private:
 	UPROPERTY(EditAnywhere)

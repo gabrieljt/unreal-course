@@ -5,7 +5,7 @@
 #include "Components/ActorComponent.h"
 #include "DoorOpener.generated.h"
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+UCLASS()
 class SURVIVE_API UDoorOpener : public UActorComponent
 {
 	GENERATED_BODY()
@@ -18,24 +18,23 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
+	virtual bool WantsToOpen() const;
+
+	UPROPERTY(EditAnywhere)
+		ATriggerVolume* OpenerTriggerVolume;
+
+private:
+	void Open() const;
+
+	void Close() const;
+
 	UPROPERTY(EditAnywhere)
 		float OpenAngle;
 
 	UPROPERTY(EditAnywhere)
 		float CloseDelay;
 
-	UPROPERTY(EditAnywhere)
-		ATriggerVolume* OpenerTriggerVolume;
-
-	UPROPERTY(EditAnywhere)
-		bool bWantsToOpen;
-
 	float LastOpenedTime;
 
 	float CloseAngle;
-
-private:
-	void Open() const;
-
-	void Close() const;
 };
