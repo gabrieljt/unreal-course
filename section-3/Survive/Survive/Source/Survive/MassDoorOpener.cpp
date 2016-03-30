@@ -27,9 +27,6 @@ float UMassDoorOpener::GetOverlappingActorsTotalMass() const
 		{
 			TotalMass += ActorPrimitiveComponent->GetMass();
 		}
-
-		UE_LOG(LogTemp, Warning, TEXT("%s is in %s trigger volume"),
-			*Actor->GetName(), *GetName())
 	}
 	return TotalMass;
 }
