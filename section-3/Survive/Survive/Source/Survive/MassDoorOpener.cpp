@@ -6,12 +6,11 @@
 UMassDoorOpener::UMassDoorOpener()
 	: UDoorOpener()
 {
-	CloseDelay = INFINITY;
 }
 
 bool UMassDoorOpener::WantsToOpen() const
 {
-	return GetOverlappingActorsTotalMass() >= RequiredMass;
+	return GetOverlappingActorsTotalMass() == RequiredMass;
 }
 
 float UMassDoorOpener::GetOverlappingActorsTotalMass() const
