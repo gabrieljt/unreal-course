@@ -5,6 +5,7 @@
 
 UActorDoorOpener::UActorDoorOpener()
 	: UDoorOpener()
+	, OtherDoorOpener(nullptr)
 {
 }
 
@@ -16,9 +17,16 @@ void UActorDoorOpener::BeginPlay()
 	{
 		OpenerActor = GetWorld()->GetFirstPlayerController()->GetPawn();
 	}
+
+	OtherDoorOpener = GetOwner()->FindComponentByClass<UMassDoorOpener>();
 }
 
 bool UActorDoorOpener::WantsToOpen() const
 {
+	if (OtherDoorOpener && OtherDoorOpener->WantsToOpen())
+	{
+		return true;
+	}
+
 	return OpenerTriggerVolume->IsOverlappingActor(OpenerActor);
 }

@@ -13,12 +13,11 @@ class SURVIVE_API UMassDoorOpener : public UDoorOpener
 public:
 	UMassDoorOpener();
 
-protected:
 	virtual bool WantsToOpen() const override;
 
 private:
 	float GetOverlappingActorsTotalMass() const;
 
 	UPROPERTY(EditAnywhere)
-		float RequiredMass;	
+		float RequiredMass;
 };

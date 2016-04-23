@@ -3,6 +3,7 @@
 #pragma once
 
 #include "DoorOpener.h"
+#include "MassDoorOpener.h"
 #include "ActorDoorOpener.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -15,10 +16,11 @@ public:
 
 	virtual void BeginPlay() override;
 
-protected:
 	virtual bool WantsToOpen() const override;
 
 private:
 	UPROPERTY(EditAnywhere)
 		AActor* OpenerActor;
+
+	UMassDoorOpener* OtherDoorOpener;
 };

@@ -17,11 +17,15 @@ public:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-protected:
 	virtual bool WantsToOpen() const;
+
+protected:
 
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* OpenerTriggerVolume;
+
+	UPROPERTY(EditAnywhere)
+		float CloseDelay;
 
 private:
 	void Open() const;
@@ -30,9 +34,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float OpenAngle;
-
-	UPROPERTY(EditAnywhere)
-		float CloseDelay;
 
 	float LastOpenedTime;
 
