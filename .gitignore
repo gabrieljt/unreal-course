@@ -35,6 +35,7 @@
 *.opensdf
 *.opendb
 *.sdf
+*.db
 
 # Precompiled Assets
 **/SourceArt/**/*.png
