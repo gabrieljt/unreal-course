@@ -5,6 +5,7 @@
 
 UActorDoorOpener::UActorDoorOpener()
 	: UDoorOpener()
+	, OtherDoorOpener(nullptr)
 {
 }
 
@@ -16,10 +17,16 @@ void UActorDoorOpener::BeginPlay()
 	{
 		OpenerActor = GetWorld()->GetFirstPlayerController()->GetPawn();
 	}
+
+	OtherDoorOpener = GetOwner()->FindComponentByClass<UMassDoorOpener>();
 }
 
-void UActorDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+bool UActorDoorOpener::WantsToOpen() const
 {
-	bWantsToOpen = OpenerTriggerVolume->IsOverlappingActor(OpenerActor);
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (OtherDoorOpener && OtherDoorOpener->WantsToOpen())
+	{
+		return true;
+	}
+
+	return OpenerTriggerVolume->IsOverlappingActor(OpenerActor);
 }

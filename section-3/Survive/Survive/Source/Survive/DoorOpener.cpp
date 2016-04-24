@@ -4,8 +4,7 @@
 #include "DoorOpener.h"
 
 UDoorOpener::UDoorOpener()
-	: bWantsToOpen(false)
-	, LastOpenedTime(0.f)
+	: LastOpenedTime(0.f)
 	, CloseAngle(0.f)
 {
 	bWantsBeginPlay = true;
@@ -23,9 +22,8 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (bWantsToOpen)
+	if (WantsToOpen())
 	{
-		bWantsToOpen = false;
 		Open();
 		LastOpenedTime = GetWorld()->GetTimeSeconds();
 	}
@@ -33,6 +31,11 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	{
 		Close();
 	}
+}
+
+bool UDoorOpener::WantsToOpen() const
+{
+	return false;
 }
 
 void UDoorOpener::Open() const
