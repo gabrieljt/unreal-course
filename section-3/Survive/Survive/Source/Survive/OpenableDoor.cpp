@@ -28,10 +28,10 @@ void UOpenableDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 void UOpenableDoor::Open()
 {
 	LastOpenedTime = GetWorld()->GetTimeSeconds();
-    OnOpenRequest.Broadcast();
+    OnOpen.Broadcast();
 }
 
 void UOpenableDoor::Close() const
 {
-	OnCloseRequest.Broadcast();
+	OnClose.Broadcast();
 }
