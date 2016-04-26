@@ -5,8 +5,7 @@
 #include "Components/ActorComponent.h"
 #include "OpenableDoor.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCloseRequest);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SURVIVE_API UOpenableDoor : public UActorComponent
@@ -23,10 +22,10 @@ public:
 	void Open();
 
 	UPROPERTY(BlueprintAssignable)
-		FOnOpenRequest OnOpenRequest;
+		FDoorEvent OnOpen;
 
 	UPROPERTY(BlueprintAssignable)
-		FOnCloseRequest OnCloseRequest;
+		FDoorEvent OnClose;
 
 private:
 	void Close() const;
