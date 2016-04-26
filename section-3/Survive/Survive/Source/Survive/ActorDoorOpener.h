@@ -3,7 +3,6 @@
 #pragma once
 
 #include "DoorOpener.h"
-#include "MassDoorOpener.h"
 #include "ActorDoorOpener.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -21,6 +20,4 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 		AActor* OpenerActor;
-
-	UMassDoorOpener* OtherDoorOpener;
 };
