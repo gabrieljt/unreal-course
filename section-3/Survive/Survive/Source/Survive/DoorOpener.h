@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "OpenableDoor.h"
 #include "Components/ActorComponent.h"
 #include "DoorOpener.generated.h"
 
@@ -24,18 +25,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 		ATriggerVolume* OpenerTriggerVolume;
 
-	UPROPERTY(EditAnywhere)
-		float CloseDelay;
-
 private:
-	void Open() const;
-
-	void Close() const;
-
 	UPROPERTY(EditAnywhere)
-		float OpenAngle;
+		AActor* OpenableDoorActor;
 
-	float LastOpenedTime;
-
-	float CloseAngle;
+	UOpenableDoor* OpenableDoorActorComponent;
 };
