@@ -4,8 +4,6 @@
 #include "DoorOpener.h"
 
 UDoorOpener::UDoorOpener()
-	: LastOpenedTime(0.f)
-	, CloseAngle(0.f)
 {
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
@@ -15,7 +13,16 @@ void UDoorOpener::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CloseAngle = GetOwner()->GetTransform().Rotator().Yaw;
+	if (!OpenableDoorActor)
+	{
+		UE_LOG(LogTemp, Error, TEXT("OpenableDoorActor not set for %s"),
+			*GetOwner()->GetName());
+	}
+	else
+	{
+		OpenableDoorActorComponent = OpenableDoorActor->FindComponentByClass<UOpenableDoor>();
+	}
+
 }
 
 void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -24,26 +31,11 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	if (WantsToOpen())
 	{
-		Open();
-		LastOpenedTime = GetWorld()->GetTimeSeconds();
-	}
-	else if (GetWorld()->GetTimeSeconds() - LastOpenedTime >= CloseDelay)
-	{
-		Close();
+		OpenableDoorActorComponent->Open();
 	}
 }
 
 bool UDoorOpener::WantsToOpen() const
 {
 	return false;
-}
-
-void UDoorOpener::Open() const
-{
-	GetOwner()->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
-}
-
-void UDoorOpener::Close() const
-{
-	GetOwner()->SetActorRotation(FRotator(0.f, CloseAngle, 0.f));
 }
