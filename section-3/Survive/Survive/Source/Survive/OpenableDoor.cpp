@@ -5,6 +5,7 @@
 
 UOpenableDoor::UOpenableDoor()
 	: LastOpenedTime(0.f)
+	, bIsOpen(false)
 {
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
@@ -19,7 +20,7 @@ void UOpenableDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (GetWorld()->GetTimeSeconds() - LastOpenedTime >= CloseDelay)
+	if (WantsToClose())
 	{
 		Close();
 	}
@@ -28,10 +29,20 @@ void UOpenableDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 void UOpenableDoor::Open()
 {
 	LastOpenedTime = GetWorld()->GetTimeSeconds();
-    OnOpen.Broadcast();
+	if (!bIsOpen)
+	{
+		bIsOpen = true;
+		OnOpen.Broadcast();
+	}
 }
 
-void UOpenableDoor::Close() const
+bool UOpenableDoor::WantsToClose() const
 {
+	return bIsOpen && GetWorld()->GetTimeSeconds() - LastOpenedTime >= CloseDelay;
+}
+
+void UOpenableDoor::Close()
+{
+	bIsOpen = false;
 	OnClose.Broadcast();
 }

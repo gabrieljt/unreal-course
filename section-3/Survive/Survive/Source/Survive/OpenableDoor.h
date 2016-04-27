@@ -28,10 +28,14 @@ public:
 		FDoorEvent OnClose;
 
 private:
-	void Close() const;
+	bool WantsToClose() const;
+
+	void Close();
 
 	UPROPERTY(EditAnywhere)
 		float CloseDelay;
 
 	float LastOpenedTime;
+
+	bool bIsOpen;
 };
