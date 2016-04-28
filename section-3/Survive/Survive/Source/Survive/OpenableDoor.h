@@ -35,7 +35,8 @@ private:
 	UPROPERTY(EditAnywhere)
 		float CloseDelay;
 
-	float LastOpenedTime;
+	UPROPERTY(VisibleAnywhere)
+		bool bIsOpen;
 
-	bool bIsOpen;
+	float LastOpenRequestTime;
 };

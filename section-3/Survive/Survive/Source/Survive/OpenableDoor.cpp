@@ -4,8 +4,8 @@
 #include "OpenableDoor.h"
 
 UOpenableDoor::UOpenableDoor()
-	: LastOpenedTime(0.f)
-	, bIsOpen(false)
+	: bIsOpen(false)
+	, LastOpenRequestTime(0.f)
 {
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
@@ -28,7 +28,7 @@ void UOpenableDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UOpenableDoor::Open()
 {
-	LastOpenedTime = GetWorld()->GetTimeSeconds();
+	LastOpenRequestTime = GetWorld()->GetTimeSeconds();
 	if (!bIsOpen)
 	{
 		bIsOpen = true;
@@ -38,7 +38,7 @@ void UOpenableDoor::Open()
 
 bool UOpenableDoor::WantsToClose() const
 {
-	return bIsOpen && GetWorld()->GetTimeSeconds() - LastOpenedTime >= CloseDelay;
+	return bIsOpen && GetWorld()->GetTimeSeconds() - LastOpenRequestTime >= CloseDelay;
 }
 
 void UOpenableDoor::Close()
