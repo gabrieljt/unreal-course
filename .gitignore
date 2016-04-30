@@ -43,6 +43,7 @@
 
 # Binary Files
 **/Binaries/*
+**/Bin/*
 
 # Builds
 **/Build/*
